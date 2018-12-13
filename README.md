@@ -19,7 +19,7 @@ Spring 的出现时因为当时 ****SUN**** 公司 **EJB** 的失败，尤其是
 ### Spring IoC 概述
 **控制反转** 是一个比较抽象的概念，对于初学者不好理解，我们可以举例说明：
 
-在实际生活中，人们要用到一样东西时，人们的基本想法是去找到这个东西，比如我们想和橙汁，在没有饮品店的日子里，最直观的做法技术，买一台榨汁机、一些橙子，准备开水。**注意**这是你自己 **“主动”** 创建的过程，也就是一杯橙汁需要主动创建。然而到了今天这个时代，由于饮品店的盛行，已经没有必要自己去榨橙汁。想喝橙汁的想法一出现，第一个想法就是去找到饮品店的联系方式，通过电话、微信等途径描述你的需要、地址和联系方式等，下单准备，过会就会有人送上橙汁了。**注意**这里你并没有**“主动”**去创造橙汁，也就是说橙汁是由饮品店提供的，而不是你，但是也完全达到了你的要求。
+在实际生活中，人们要用到一样东西时，人们的基本想法是去找到这个东西，比如我们想和橙汁，在没有饮品店的日子里，最直观的做法技术，买一台榨汁机、一些橙子，准备开水。**注意** 这是你自己 **“主动”** 创建的过程，也就是一杯橙汁需要主动创建。然而到了今天这个时代，由于饮品店的盛行，已经没有必要自己去榨橙汁。想喝橙汁的想法一出现，第一个想法就是去找到饮品店的联系方式，通过电话、微信等途径描述你的需要、地址和联系方式等，下单准备，过会就会有人送上橙汁了。**注意**这里你并没有 **“主动”** 去创造橙汁，也就是说橙汁是由饮品店提供的，而不是你，但是也完全达到了你的要求。
 
 上面这个例子用到的就是**控制反转**，现实中系统的开发者是一个团队，团队由许多开发者组成，现在假设你在一个电商网站负责开发工作，你熟悉商品交易流程，但是对财务却不知名熟悉，而团队中有些成员对于财务处理十分熟悉，在交易的过程中，商品交易流程需要调度财务的相关接口，才能得以实现，那么你的期望应该是：
 - 熟悉财务流程的成员开发对应的接口。
@@ -28,7 +28,46 @@ Spring 的出现时因为当时 ****SUN**** 公司 **EJB** 的失败，尤其是
 
 **控制反转**的概念通俗来说就是你对某一领域并不精通，这个时候你可以把创建对象的主动权转交到别人手里，而到时候我们只需要去调用就可以了。
 
-#### Spring IoC容器
+#### Spring IoC容器:
 **Spring IoC** 容器的设计主要是基于 **BeanFactory** 和 **ApplicationContext** 这两个接口，其中 **ApplicationContext** 是 **BeanFactory** 的子接口之一，换句话说 **BeanFactory** 是 **Spring IoC** 容器所定义的最底层接口，而 **AppkicationContext** 是 **Spring IoC**容器高级接口之一,并且对 **BeanFactory** 功能做了许多有用的扩展，所有在绝大多数情况下，都会使用 **ApplicationContext** 作为 **Spring IoC** 容器
+
+**BeanFactory** 源码 :
+
+	public interface BeanFactory {
+       	String FACTORY_BEAN_PREFIX = "&";
+
+       	Object getBean(String var1) throws BeansException;
+
+       	<T> T getBean(String var1, Class<T> var2) throws BeansException;
+
+       	Object getBean(String var1, Object... var2) throws BeansException;
+
+       	<T> T getBean(Class<T> var1) throws BeansException;
+
+       	<T> T getBean(Class<T> var1, Object... var2) throws BeansException;
+
+       	<T> ObjectProvider<T> getBeanProvider(Class<T> var1);
+
+       	<T> ObjectProvider<T> getBeanProvider(ResolvableType var1);
+
+       	boolean containsBean(String var1);
+
+       	boolean isSingleton(String var1) throws NoSuchBeanDefinitionException;
+
+       	boolean isPrototype(String var1) throws NoSuchBeanDefinitionException;
+
+       	boolean isTypeMatch(String var1, ResolvableType var2) throws NoSuchBeanDefinitionException;
+
+       	boolean isTypeMatch(String var1, Class<?> var2) throws NoSuchBeanDefinitionException;
+
+       	@Nullable
+       	Class<?> getType(String var1) throws NoSuchBeanDefinitionException;
+
+       	String[] getAliases(String var1);
+	}
+从这个接口中，我们可以看出：
+- **getBean** 的多方法用于获取配置给 **Spring IoC** 容器的 Bean。从参数类型看可以是 字符串 ，也可以是 **Class** 类型，由于 **Class** 类型可以扩展接口也可以继承父类，所有在一定程度上会存在使用父类类型无法准确获得实例的异常，比如获取学生类，但是学生子类有 **男学生** 和 **女学生** 这两个类，这个时候通过学生类就无法从容器中得到实例，因为容器无法判断具体的实现类。
+- **isSingleton** 用于判断是否为单例，如果判断为真，其意思就是该 **Bean** 在容器中是作为一个唯一单例存在的，而 **isPrototype** 则相反，如果判断为真，意思就是当你从容器中获得 **Bean**，容器就为你生成一个新的实例。在默认情况下，**Spring** 会为 **Bean** 创建一个单例，也就是默认情况下 **isSingleton** 返回 **true** ,而 **isPrototype** 返回 **false**.
+
 
 
