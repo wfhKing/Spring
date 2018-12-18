@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
+    <!--通过 xml 方式配置-->
     <bean id="source" class="com.nf147.ssm.passive.Source">
         <property name="fruit" value="橙汁"/>
         <property name="sugar" value="少糖"/>

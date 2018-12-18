@@ -1,5 +1,9 @@
 package com.nf147.ssm.passive;
 
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+
 /**
  * 被动创建对象
  * 把果汁交给饮品店处理
